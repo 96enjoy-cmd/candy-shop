@@ -14,6 +14,16 @@ create table if not exists ingredients (
   created_at  timestamptz not null default now()
 );
 
+-- ---------- ค่าอุปกรณ์ (Equipment) ----------
+create table if not exists equipment (
+  id          bigint generated always as identity primary key,
+  name        text not null,               -- ชื่ออุปกรณ์ เช่น เตาอบ, เครื่องตีแป้ง
+  price       numeric not null default 0,   -- ราคา (บาท)
+  source_url  text,                         -- ลิงก์ Shopee/TikTok (ถ้ามี)
+  note        text,
+  created_at  timestamptz not null default now()
+);
+
 -- ---------- สินค้า / เมนูขนม (Products) ----------
 create table if not exists products (
   id          bigint generated always as identity primary key,
@@ -51,6 +61,7 @@ create index if not exists idx_order_items_order on order_items(order_id);
 
 -- ---------- เปิดสิทธิ์ให้ anon key ใช้งานได้ (โหมดง่าย ไม่มีระบบล็อกอิน) ----------
 alter table ingredients  enable row level security;
+alter table equipment    enable row level security;
 alter table products     enable row level security;
 alter table orders       enable row level security;
 alter table order_items  enable row level security;
@@ -66,7 +77,10 @@ drop policy if exists "public all products"    on products;
 drop policy if exists "public all orders"      on orders;
 drop policy if exists "public all order_items" on order_items;
 
+drop policy if exists "public all equipment"   on equipment;
+
 create policy "public all ingredients" on ingredients for all using (true) with check (true);
+create policy "public all equipment"   on equipment   for all using (true) with check (true);
 create policy "public all products"    on products    for all using (true) with check (true);
 create policy "public all orders"      on orders      for all using (true) with check (true);
 create policy "public all order_items" on order_items for all using (true) with check (true);

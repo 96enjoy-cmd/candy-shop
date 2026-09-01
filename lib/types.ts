@@ -8,6 +8,15 @@ export type Ingredient = {
   created_at: string;
 };
 
+export type Equipment = {
+  id: number;
+  name: string;
+  price: number;
+  source_url: string | null;
+  note: string | null;
+  created_at: string;
+};
+
 export type Product = {
   id: number;
   name: string;
