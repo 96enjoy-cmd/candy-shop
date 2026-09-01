@@ -17,7 +17,7 @@ export default function CostsPage() {
       <div className="flex gap-1 rounded-xl bg-pink-50 p-1 text-sm">
         <button
           className={`flex-1 rounded-lg py-2 font-medium ${
-            tab === "products" ? "bg-white shadow text-brand-dark" : "text-gray-500"
+            tab === "products" ? "bg-white shadow text-brand-dark" : "text-cocoa-soft"
           }`}
           onClick={() => setTab("products")}
         >
@@ -27,7 +27,7 @@ export default function CostsPage() {
           className={`flex-1 rounded-lg py-2 font-medium ${
             tab === "ingredients"
               ? "bg-white shadow text-brand-dark"
-              : "text-gray-500"
+              : "text-cocoa-soft"
           }`}
           onClick={() => setTab("ingredients")}
         >
@@ -122,7 +122,7 @@ function ProductsTab() {
       {/* ตาราง */}
       <div className="card overflow-x-auto">
         <table className="w-full text-sm">
-          <thead className="bg-pink-50/60 text-left text-xs text-gray-500">
+          <thead className="bg-pink-50/60 text-left text-xs text-cocoa-soft">
             <tr>
               <th className="px-4 py-2">ขนม</th>
               <th className="px-4 py-2 text-right">ราคาขาย</th>
@@ -135,13 +135,13 @@ function ProductsTab() {
           <tbody>
             {loading ? (
               <tr>
-                <td colSpan={6} className="p-6 text-center text-gray-400">
+                <td colSpan={6} className="p-6 text-center text-cocoa-soft/70">
                   กำลังโหลด…
                 </td>
               </tr>
             ) : rows.length === 0 ? (
               <tr>
-                <td colSpan={6} className="p-6 text-center text-gray-400">
+                <td colSpan={6} className="p-6 text-center text-cocoa-soft/70">
                   ยังไม่มีสินค้า
                 </td>
               </tr>
@@ -163,7 +163,7 @@ function ProductsTab() {
                     </td>
                     <td
                       className={`px-4 py-2 text-right ${
-                        margin < 30 ? "text-red-500" : "text-gray-600"
+                        margin < 30 ? "text-red-500" : "text-cocoa-soft"
                       }`}
                     >
                       {margin.toFixed(0)}%
@@ -183,7 +183,7 @@ function ProductsTab() {
           </tbody>
         </table>
       </div>
-      <p className="text-xs text-gray-400">
+      <p className="text-xs text-cocoa-soft/70">
         💡 คลิกที่ตัวเลขราคา/ต้นทุนเพื่อแก้ไขได้เลย · แถว %กำไรสีแดง = ต่ำกว่า 30%
       </p>
     </div>
@@ -270,7 +270,7 @@ function IngredientsTab() {
 
       <div className="card overflow-x-auto">
         <table className="w-full text-sm">
-          <thead className="bg-pink-50/60 text-left text-xs text-gray-500">
+          <thead className="bg-pink-50/60 text-left text-xs text-cocoa-soft">
             <tr>
               <th className="px-4 py-2">วัตถุดิบ</th>
               <th className="px-4 py-2">หน่วย</th>
@@ -281,13 +281,13 @@ function IngredientsTab() {
           <tbody>
             {loading ? (
               <tr>
-                <td colSpan={4} className="p-6 text-center text-gray-400">
+                <td colSpan={4} className="p-6 text-center text-cocoa-soft/70">
                   กำลังโหลด…
                 </td>
               </tr>
             ) : rows.length === 0 ? (
               <tr>
-                <td colSpan={4} className="p-6 text-center text-gray-400">
+                <td colSpan={4} className="p-6 text-center text-cocoa-soft/70">
                   ยังไม่มีวัตถุดิบ
                 </td>
               </tr>
@@ -295,7 +295,7 @@ function IngredientsTab() {
               rows.map((r) => (
                 <tr key={r.id} className="border-t border-pink-50">
                   <td className="px-4 py-2 font-medium">{r.name}</td>
-                  <td className="px-4 py-2 text-gray-500">{r.unit}</td>
+                  <td className="px-4 py-2 text-cocoa-soft">{r.unit}</td>
                   <td className="px-2 py-2 text-right">
                     <EditNum
                       value={r.cost_per_unit}

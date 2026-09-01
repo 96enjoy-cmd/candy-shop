@@ -65,20 +65,25 @@ export default function DashboardPage() {
 
       {/* Chart */}
       <div className="card p-4">
-        <h2 className="mb-3 font-semibold text-gray-700">
+        <h2 className="mb-3 font-semibold text-cocoa">
           ยอดขาย 7 วันล่าสุด
         </h2>
         <div className="h-64 w-full">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={stats.last7}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#f3d6e4" />
-              <XAxis dataKey="label" fontSize={12} />
-              <YAxis fontSize={12} />
+              <CartesianGrid strokeDasharray="3 3" stroke="#f1e0c4" />
+              <XAxis dataKey="label" fontSize={12} stroke="#8a6650" />
+              <YAxis fontSize={12} stroke="#8a6650" />
               <Tooltip
                 formatter={(v: number) => baht(v)}
-                labelStyle={{ color: "#c23a6e" }}
+                labelStyle={{ color: "#a85f22" }}
+                contentStyle={{
+                  borderRadius: 16,
+                  border: "1px solid #f7e7cf",
+                  boxShadow: "0 6px 20px -8px rgba(168,95,34,.25)",
+                }}
               />
-              <Bar dataKey="sales" fill="#e0568a" radius={[6, 6, 0, 0]} />
+              <Bar dataKey="sales" fill="#d98a3d" radius={[8, 8, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
@@ -87,11 +92,11 @@ export default function DashboardPage() {
       {/* Best sellers */}
       {stats.topProducts.length > 0 && (
         <div className="card p-4">
-          <h2 className="mb-3 font-semibold text-gray-700">ขนมขายดี</h2>
+          <h2 className="mb-3 font-semibold text-cocoa">ขนมขายดี</h2>
           <div className="space-y-2">
             {stats.topProducts.map((t, i) => (
               <div key={t.name} className="flex items-center gap-3 text-sm">
-                <span className="w-5 text-gray-400">{i + 1}.</span>
+                <span className="w-5 text-cocoa-soft/70">{i + 1}.</span>
                 <span className="flex-1">{t.name}</span>
                 <span className="font-medium">{t.qty} ชิ้น</span>
                 <span className="w-24 text-right text-brand-dark">
@@ -105,19 +110,19 @@ export default function DashboardPage() {
 
       {/* Recent orders */}
       <div className="card overflow-hidden">
-        <div className="border-b border-pink-100 px-4 py-3 font-semibold text-gray-700">
+        <div className="border-b border-pink-100 px-4 py-3 font-semibold text-cocoa">
           ออเดอร์ล่าสุด
         </div>
         {loading ? (
-          <div className="p-6 text-center text-gray-400">กำลังโหลด…</div>
+          <div className="p-6 text-center text-cocoa-soft/70">กำลังโหลด…</div>
         ) : orders.length === 0 ? (
-          <div className="p-6 text-center text-gray-400">
+          <div className="p-6 text-center text-cocoa-soft/70">
             ยังไม่มีออเดอร์ — กด “เปิดออเดอร์ใหม่” เพื่อเริ่ม
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
-              <thead className="bg-pink-50/60 text-left text-xs text-gray-500">
+              <thead className="bg-pink-50/60 text-left text-xs text-cocoa-soft">
                 <tr>
                   <th className="px-4 py-2">วันเวลา</th>
                   <th className="px-4 py-2">ลูกค้า</th>
@@ -131,7 +136,7 @@ export default function DashboardPage() {
               <tbody>
                 {orders.slice(0, 30).map((o) => (
                   <tr key={o.id} className="border-t border-pink-50">
-                    <td className="px-4 py-2 text-gray-500">
+                    <td className="px-4 py-2 text-cocoa-soft">
                       {new Date(o.created_at).toLocaleString("th-TH", {
                         day: "2-digit",
                         month: "short",
@@ -141,7 +146,7 @@ export default function DashboardPage() {
                     </td>
                     <td className="px-4 py-2">{o.customer || "-"}</td>
                     <td className="px-4 py-2">{o.channel}</td>
-                    <td className="px-4 py-2 text-gray-500">
+                    <td className="px-4 py-2 text-cocoa-soft">
                       {(o.order_items || [])
                         .map((it) => `${it.product_name}×${it.qty}`)
                         .join(", ") || "-"}
@@ -201,10 +206,10 @@ function Stat({
       ? "text-brand-dark"
       : tone === "green"
       ? "text-green-600"
-      : "text-gray-800";
+      : "text-cocoa";
   return (
     <div className="card p-4">
-      <div className="text-xs text-gray-500">{label}</div>
+      <div className="text-xs text-cocoa-soft">{label}</div>
       <div className={`mt-1 text-xl font-bold ${color}`}>{value}</div>
     </div>
   );
@@ -270,7 +275,7 @@ function OrderForm({
       <div className="max-h-[92vh] w-full max-w-lg overflow-y-auto rounded-t-3xl bg-white p-5 sm:rounded-2xl">
         <div className="mb-4 flex items-center justify-between">
           <h2 className="text-lg font-bold text-brand-dark">เปิดออเดอร์ใหม่</h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-700">
+          <button onClick={onClose} className="text-cocoa-soft/70 hover:text-cocoa">
             ✕
           </button>
         </div>
@@ -304,7 +309,7 @@ function OrderForm({
         <label className="label">เลือกเมนู</label>
         <div className="mb-3 flex flex-wrap gap-2">
           {products.length === 0 && (
-            <p className="text-sm text-gray-400">
+            <p className="text-sm text-cocoa-soft/70">
               ยังไม่มีสินค้า — เพิ่มได้ที่หน้า “ต้นทุน / วัตถุดิบ”
             </p>
           )}
@@ -356,7 +361,7 @@ function OrderForm({
         )}
 
         <div className="mb-4 flex justify-between border-t border-pink-100 pt-3 text-sm">
-          <span className="text-gray-500">
+          <span className="text-cocoa-soft">
             ต้นทุน {baht(costTotal)} · กำไร {baht(total - costTotal)}
           </span>
           <span className="text-lg font-bold text-brand-dark">
