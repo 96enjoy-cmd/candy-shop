@@ -5,6 +5,8 @@ import { supabase, isSupabaseConfigured } from "@/lib/supabase";
 import { baht, Ingredient, Product, Equipment } from "@/lib/types";
 import ConfigNotice from "@/components/ConfigNotice";
 
+const EQUIP_KEY = "dnn_equipment";
+
 export default function CostsPage() {
   const [tab, setTab] = useState<"products" | "ingredients" | "equipment">(
     "products"
@@ -337,14 +339,27 @@ function EquipmentTab() {
   const [fetching, setFetching] = useState(false);
   const [hint, setHint] = useState<string | null>(null);
 
-  async function load() {
-    if (!supabase) return;
+  // เก็บข้อมูลอุปกรณ์ในเครื่อง (localStorage) — ใช้งานได้ทันทีไม่ต้องตั้งค่า DB
+  function readStore(): Equipment[] {
+    try {
+      const raw = localStorage.getItem(EQUIP_KEY);
+      return raw ? (JSON.parse(raw) as Equipment[]) : [];
+    } catch {
+      return [];
+    }
+  }
+  function writeStore(list: Equipment[]) {
+    try {
+      localStorage.setItem(EQUIP_KEY, JSON.stringify(list));
+    } catch {
+      /* ไม่ให้พังถ้าเบราว์เซอร์ปิด storage */
+    }
+    setRows(list);
+  }
+
+  function load() {
     setLoading(true);
-    const { data } = await supabase
-      .from("equipment")
-      .select("*")
-      .order("created_at", { ascending: false });
-    setRows((data as Equipment[]) || []);
+    setRows(readStore());
     setLoading(false);
   }
   useEffect(() => {
@@ -376,30 +391,28 @@ function EquipmentTab() {
     }
   }
 
-  async function add() {
-    if (!supabase || !form.name) return;
-    await supabase.from("equipment").insert({
+  function add() {
+    if (!form.name) return;
+    const item: Equipment = {
+      id: Date.now(),
       name: form.name,
       price: Number(form.price) || 0,
       source_url: form.source_url || null,
       note: form.note || null,
-    });
+      created_at: new Date().toISOString(),
+    };
+    writeStore([item, ...readStore()]);
     setForm({ name: "", price: "", source_url: "", note: "" });
     setHint(null);
-    load();
   }
 
-  async function update(r: Equipment, patch: Partial<Equipment>) {
-    if (!supabase) return;
-    await supabase.from("equipment").update(patch).eq("id", r.id);
-    load();
+  function update(r: Equipment, patch: Partial<Equipment>) {
+    writeStore(readStore().map((x) => (x.id === r.id ? { ...x, ...patch } : x)));
   }
 
-  async function del(r: Equipment) {
-    if (!supabase) return;
+  function del(r: Equipment) {
     if (!confirm(`ลบ "${r.name}"?`)) return;
-    await supabase.from("equipment").delete().eq("id", r.id);
-    load();
+    writeStore(readStore().filter((x) => x.id !== r.id));
   }
 
   const total = rows.reduce((s, r) => s + Number(r.price || 0), 0);
